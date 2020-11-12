@@ -23,7 +23,7 @@ class Hotel
     end
 
     def check_in(person, room_name)
-        if !room_exists?(room_name)
+        if !self.room_exists?(room_name)
             puts "sorry, room does not exist"
         else
             if @rooms[room_name].add_occupant(person)
@@ -35,17 +35,19 @@ class Hotel
     end
 
     def has_vacancy?
-        @rooms.each_key do |room_name|
-            if !@rooms[room_name].full?
-                return true
-            end
-        end
-        false
+        # @rooms.each_key do |room_name|
+        #     if !@rooms[room_name].full?
+        #         return true
+        #     end
+        # end
+        # false
+        @rooms.values.any? { |room| !room.full? }
     end
 
     def list_rooms
         @rooms.each_key do |room_name|
-            puts room_name + " " + @rooms[room_name].available_space.to_s
+            # puts room_name + " " + @rooms[room_name].available_space.to_s
+            puts "#{room_name} : #{@rooms[room_name].available_space}"
         end
     end
 end
