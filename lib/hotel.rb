@@ -1,9 +1,13 @@
 require_relative "room"
 
 class Hotel
-    def initialize(name, hash)
+    def initialize(name, capacities)
         @name = name
-        @rooms = Hash.new { |k, v| hash[k] = Room.initialize(v) }
+        @rooms = {}
+
+        capacities.each do |room_name, capacity| 
+            @rooms[room_name] = Room.new(capacity)
+        end
     end
 
     def name
@@ -20,14 +24,28 @@ class Hotel
 
     def check_in(person, room_name)
         if !room_exists?(room_name)
-            p "sorry, room does not exist"
+            puts "sorry, room does not exist"
         else
-            room_name.add_occupant(person)
-            if room_name.add_occupant(person)
-                p "check in successful"
+            if @rooms[room_name].add_occupant(person)
+                puts "check in successful"
             else
-                p "sorry, room is full"
+                puts "sorry, room is full"
             end
+        end
+    end
+
+    def has_vacancy?
+        @rooms.each_key do |room_name|
+            if !@rooms[room_name].full?
+                return true
+            end
+        end
+        false
+    end
+
+    def list_rooms
+        @rooms.each_key do |room_name|
+            puts room_name + " " + @rooms[room_name].available_space.to_s
         end
     end
 end
